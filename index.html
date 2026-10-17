@@ -16,10 +16,10 @@
         href="manifest.json">
 
   <link rel="icon"
-        href="kimata-icon.jpg">
+        href="kimata-icon.png">
 
   <link rel="apple-touch-icon"
-        href="kimata-icon.jpg">
+        href="kimata-icon.png">
 
   <style>
 
@@ -67,20 +67,51 @@
       font-weight: 700;
     }
 
-    .test {
-      margin-top: 50px;
-      padding: 25px;
-      background: white;
-      border-radius: 18px;
-      text-align: center;
-      font-size: 22px;
-      box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    .date {
+      margin-top: 8px;
+      font-size: 17px;
+      color: #6f7b86;
     }
 
-    .installText {
-      margin-top: 20px;
-      font-size: 17px;
-      line-height: 1.5;
+    .groupCard {
+      width: 100%;
+      min-height: 88px;
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      padding: 0 24px;
+      margin: 14px 0;
+
+      border: none;
+      border-radius: 18px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #32a8df,
+          #1471b7
+        );
+
+      color: white;
+
+      font-size: 26px;
+      font-weight: 700;
+
+      box-shadow:
+        0 4px 12px rgba(26,111,174,.16);
+    }
+
+    .arrow {
+      font-size: 40px;
+      line-height: 1;
+    }
+
+    .message {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 18px;
       color: #6f7b86;
     }
 
@@ -101,45 +132,142 @@
       Attendance
     </div>
 
-  </div>
-
-  <div class="test">
-
-    PWA test is working.
-
-    <div class="installText">
-
-      Add this page to your home screen.
-
-      <br><br>
-
-      If the Kimata icon appears,
-      we’re ready to connect the real attendance system.
-
+    <div id="todayDate"
+         class="date">
     </div>
 
   </div>
 
+
+  <div id="groupButtons"></div>
+
+
+  <div id="message"
+       class="message">
+    Loading groups...
+  </div>
+
 </div>
+
 
 <script>
 
-  if ("serviceWorker" in navigator) {
+const API_URL =
+  "https://script.google.com/macros/s/AKfycbw9Nrd2ol_Abgvf3FYVztBZCQO-Al93XcMiY0VmK95yi2bgHxJ_u16G5yuuvv9FF2pdbg/exec";
 
-    window.addEventListener(
-      "load",
-      function() {
 
-        navigator.serviceWorker.register(
-          "service-worker.js"
+function showDate() {
+
+  const today =
+    new Date();
+
+  document
+    .getElementById("todayDate")
+    .innerText =
+      today.toLocaleDateString(
+        "en-AU",
+        {
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric"
+        }
+      );
+
+}
+
+
+async function loadGroups() {
+
+  const container =
+    document.getElementById(
+      "groupButtons"
+    );
+
+  const message =
+    document.getElementById(
+      "message"
+    );
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL + "?api=groups"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    container.innerHTML = "";
+
+
+    data.groups.forEach(
+      function(group) {
+
+        const button =
+          document.createElement(
+            "button"
+          );
+
+
+        button.className =
+          "groupCard";
+
+
+        button.innerHTML =
+          "<span>" +
+          group +
+          "</span>" +
+          "<span class='arrow'>›</span>";
+
+
+        container.appendChild(
+          button
         );
 
       }
     );
 
+
+    message.innerText = "";
+
+
+  } catch (error) {
+
+    message.innerText =
+      "Could not connect to attendance system.";
+
   }
+
+}
+
+
+showDate();
+
+loadGroups();
+
+
+if ("serviceWorker" in navigator) {
+
+  window.addEventListener(
+    "load",
+    function() {
+
+      navigator.serviceWorker.register(
+        "service-worker.js"
+      );
+
+    }
+  );
+
+}
 
 </script>
 
 </body>
+
 </html>
