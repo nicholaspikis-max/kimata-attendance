@@ -4,7 +4,7 @@ const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./kimata-icon.jpg"
+  "./kimata-icon.png"
 ];
 
 self.addEventListener("install", event => {
