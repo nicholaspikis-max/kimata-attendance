@@ -1,13 +1,13 @@
-const CACHE_NAME = "kimata-attendance-v1";
+const CACHE_NAME = "kimata-attendance-v2";
 
 const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
   "./manifest.json",
   "./kimata-icon.png"
 ];
 
 self.addEventListener("install", event => {
+  self.skipWaiting();
+
   event.waitUntil(
     caches
       .open(CACHE_NAME)
@@ -15,10 +15,36 @@ self.addEventListener("install", event => {
   );
 });
 
-self.addEventListener("fetch", event => {
-  event.respondWith(
+self.addEventListener("activate", event => {
+  event.waitUntil(
     caches
-      .match(event.request)
-      .then(response => response || fetch(event.request))
+      .keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames
+            .filter(name => name !== CACHE_NAME)
+            .map(name => caches.delete(name))
+        );
+      })
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", event => {
+
+  // Always try to get the newest app page first
+  if (event.request.mode === "navigate") {
+
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => caches.match("./"))
+    );
+
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .catch(() => caches.match(event.request))
   );
 });
