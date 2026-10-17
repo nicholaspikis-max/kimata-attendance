@@ -48,6 +48,10 @@
       padding: 30px 18px 45px;
     }
 
+    .hidden {
+      display: none;
+    }
+
     .brand {
       text-align: center;
       margin: 20px 0 40px;
@@ -101,6 +105,8 @@
 
       box-shadow:
         0 4px 12px rgba(26,111,174,.16);
+
+      cursor: pointer;
     }
 
     .arrow {
@@ -108,10 +114,150 @@
       line-height: 1;
     }
 
-    .message {
-      margin-top: 30px;
+    .smallKimata {
       text-align: center;
+      color: #1471b7;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 38px;
+    }
+
+    .rollDate {
+      text-align: center;
+      color: #6f7b86;
       font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    .instruction {
+      text-align: center;
+      color: #6f7b86;
+      font-size: 17px;
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .statBox {
+      background: white;
+      border: 1px solid #dce3e9;
+      border-radius: 14px;
+      padding: 14px 6px;
+      text-align: center;
+    }
+
+    .statNumber {
+      display: block;
+      font-size: 30px;
+      font-weight: 750;
+    }
+
+    .statLabel {
+      display: block;
+      margin-top: 4px;
+      font-size: 15px;
+      color: #6f7b86;
+    }
+
+    .presentNumber {
+      color: #198754;
+    }
+
+    .absentNumber {
+      color: #c93a3a;
+    }
+
+    .student {
+      display: flex;
+      align-items: center;
+
+      width: 100%;
+      min-height: 74px;
+
+      padding: 15px 18px;
+      margin: 9px 0;
+
+      background: #e8f6ec;
+
+      border: 2px solid #79bb89;
+      border-radius: 15px;
+
+      font-size: 21px;
+      font-weight: 550;
+
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .student.absent {
+      background: #ffe8e8;
+      border-color: #df5555;
+    }
+
+    .statusIcon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      width: 39px;
+      height: 39px;
+
+      margin-right: 15px;
+
+      border-radius: 50%;
+
+      font-size: 22px;
+      font-weight: 700;
+
+      flex-shrink: 0;
+    }
+
+    .presentIcon {
+      background: #cdebd5;
+      color: #187b3e;
+    }
+
+    .absentIcon {
+      background: #ffd0d0;
+      color: #c72f2f;
+    }
+
+    .backButton {
+      width: 100%;
+      min-height: 66px;
+
+      margin-top: 22px;
+
+      border: none;
+      border-radius: 14px;
+
+      background: #e4e9ed;
+      color: #2c3944;
+
+      font-size: 21px;
+      font-weight: 700;
+
+      cursor: pointer;
+    }
+
+    .message {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 17px;
       color: #6f7b86;
     }
 
@@ -122,29 +268,101 @@
 
 <div class="container">
 
-  <div class="brand">
 
-    <div class="kimata">
-      KIMATA
+  <div id="homeScreen">
+
+    <div class="brand">
+
+      <div class="kimata">
+        KIMATA
+      </div>
+
+      <div class="title">
+        Attendance
+      </div>
+
+      <div id="todayDate"
+           class="date">
+      </div>
+
     </div>
 
-    <div class="title">
-      Attendance
-    </div>
+    <div id="groupButtons"></div>
 
-    <div id="todayDate"
-         class="date">
+    <div id="homeMessage"
+         class="message">
+      Loading groups...
     </div>
 
   </div>
 
 
-  <div id="groupButtons"></div>
+  <div id="rollScreen"
+       class="hidden">
 
+    <div class="smallKimata">
+      KIMATA
+    </div>
 
-  <div id="message"
-       class="message">
-    Loading groups...
+    <h1 id="groupTitle"></h1>
+
+    <div id="rollDate"
+         class="rollDate">
+    </div>
+
+    <div class="instruction">
+      Everyone starts as present.<br>
+      Tap a student to mark them absent.
+    </div>
+
+    <div class="stats">
+
+      <div class="statBox">
+        <span id="totalCount"
+              class="statNumber">
+          0
+        </span>
+
+        <span class="statLabel">
+          Total
+        </span>
+      </div>
+
+      <div class="statBox">
+        <span id="presentCount"
+              class="statNumber presentNumber">
+          0
+        </span>
+
+        <span class="statLabel">
+          Present
+        </span>
+      </div>
+
+      <div class="statBox">
+        <span id="absentCount"
+              class="statNumber absentNumber">
+          0
+        </span>
+
+        <span class="statLabel">
+          Absent
+        </span>
+      </div>
+
+    </div>
+
+    <div id="studentList"></div>
+
+    <button class="backButton"
+            onclick="goHome()">
+      Back
+    </button>
+
+    <div id="rollMessage"
+         class="message">
+    </div>
+
   </div>
 
 </div>
@@ -154,6 +372,11 @@
 
 const API_URL =
   "https://script.google.com/macros/s/AKfycbw9Nrd2ol_Abgvf3FYVztBZCQO-Al93XcMiY0VmK95yi2bgHxJ_u16G5yuuvv9FF2pdbg/exec";
+
+
+let currentGroup = "";
+let currentStudents = [];
+let currentDateKey = "";
 
 
 function showDate() {
@@ -177,6 +400,60 @@ function showDate() {
 }
 
 
+function getTodayKey() {
+
+  const today =
+    new Date();
+
+  const year =
+    today.getFullYear();
+
+  const month =
+    String(
+      today.getMonth() + 1
+    ).padStart(
+      2,
+      "0"
+    );
+
+  const day =
+    String(
+      today.getDate()
+    ).padStart(
+      2,
+      "0"
+    );
+
+  return year + "-" + month + "-" + day;
+
+}
+
+
+function formatDisplayDate(dateKey) {
+
+  const parts =
+    dateKey.split("-");
+
+  const date =
+    new Date(
+      Number(parts[0]),
+      Number(parts[1]) - 1,
+      Number(parts[2])
+    );
+
+  return date.toLocaleDateString(
+    "en-AU",
+    {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric"
+    }
+  );
+
+}
+
+
 async function loadGroups() {
 
   const container =
@@ -186,7 +463,7 @@ async function loadGroups() {
 
   const message =
     document.getElementById(
-      "message"
+      "homeMessage"
     );
 
 
@@ -225,6 +502,12 @@ async function loadGroups() {
           "<span class='arrow'>›</span>";
 
 
+        button.onclick =
+          function() {
+            openGroup(group);
+          };
+
+
         container.appendChild(
           button
         );
@@ -242,6 +525,228 @@ async function loadGroups() {
       "Could not connect to attendance system.";
 
   }
+
+}
+
+
+async function openGroup(group) {
+
+  currentGroup = group;
+  currentDateKey = getTodayKey();
+
+  document
+    .getElementById("homeScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("rollScreen")
+    .classList.remove("hidden");
+
+
+  document
+    .getElementById("groupTitle")
+    .innerText = group;
+
+
+  document
+    .getElementById("rollDate")
+    .innerText =
+      formatDisplayDate(
+        currentDateKey
+      );
+
+
+  document
+    .getElementById("studentList")
+    .innerHTML = "";
+
+
+  document
+    .getElementById("rollMessage")
+    .innerText =
+      "Loading students...";
+
+
+  try {
+
+    const response =
+      await fetch(
+        API_URL +
+        "?api=roll&group=" +
+        encodeURIComponent(group) +
+        "&date=" +
+        currentDateKey
+      );
+
+
+    const data =
+      await response.json();
+
+
+    currentStudents =
+      data.students;
+
+
+    renderStudents();
+
+
+    document
+      .getElementById("rollMessage")
+      .innerText = "";
+
+
+  } catch (error) {
+
+    document
+      .getElementById("rollMessage")
+      .innerText =
+        "Could not load this roll.";
+
+  }
+
+}
+
+
+function renderStudents() {
+
+  const container =
+    document.getElementById(
+      "studentList"
+    );
+
+
+  container.innerHTML = "";
+
+
+  currentStudents.forEach(
+    function(student, index) {
+
+      const row =
+        document.createElement(
+          "div"
+        );
+
+
+      row.className =
+        "student";
+
+
+      if (!student.present) {
+        row.classList.add(
+          "absent"
+        );
+      }
+
+
+      const icon =
+        document.createElement(
+          "span"
+        );
+
+
+      icon.className =
+        student.present
+          ? "statusIcon presentIcon"
+          : "statusIcon absentIcon";
+
+
+      icon.innerText =
+        student.present
+          ? "✓"
+          : "×";
+
+
+      const name =
+        document.createElement(
+          "span"
+        );
+
+
+      name.innerText =
+        student.name;
+
+
+      row.appendChild(
+        icon
+      );
+
+
+      row.appendChild(
+        name
+      );
+
+
+      row.onclick =
+        function() {
+
+          currentStudents[index]
+            .present =
+              !currentStudents[index]
+                .present;
+
+
+          renderStudents();
+
+        };
+
+
+      container.appendChild(
+        row
+      );
+
+    }
+  );
+
+
+  updateStats();
+
+}
+
+
+function updateStats() {
+
+  const total =
+    currentStudents.length;
+
+
+  const present =
+    currentStudents.filter(
+      student => student.present
+    ).length;
+
+
+  const absent =
+    total - present;
+
+
+  document
+    .getElementById("totalCount")
+    .innerText = total;
+
+
+  document
+    .getElementById("presentCount")
+    .innerText = present;
+
+
+  document
+    .getElementById("absentCount")
+    .innerText = absent;
+
+}
+
+
+function goHome() {
+
+  currentStudents = [];
+
+  document
+    .getElementById("rollScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("homeScreen")
+    .classList.remove("hidden");
 
 }
 
