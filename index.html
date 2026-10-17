@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+
+  <meta name="theme-color"
+        content="#1471b7">
+
+  <title>Kimata Attendance</title>
+
+  <link rel="manifest"
+        href="manifest.json">
+
+  <link rel="icon"
+        href="kimata-icon.jpg">
+
+  <link rel="apple-touch-icon"
+        href="kimata-icon.jpg">
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f7fa;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      color: #17212b;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 30px 18px 45px;
+    }
+
+    .brand {
+      text-align: center;
+      margin: 20px 0 40px;
+    }
+
+    .kimata {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #1471b7;
+    }
+
+    .title {
+      margin-top: 5px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .test {
+      margin-top: 50px;
+      padding: 25px;
+      background: white;
+      border-radius: 18px;
+      text-align: center;
+      font-size: 22px;
+      box-shadow: 0 4px 14px rgba(0,0,0,.08);
+    }
+
+    .installText {
+      margin-top: 20px;
+      font-size: 17px;
+      line-height: 1.5;
+      color: #6f7b86;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="brand">
+
+    <div class="kimata">
+      KIMATA
+    </div>
+
+    <div class="title">
+      Attendance
+    </div>
+
+  </div>
+
+  <div class="test">
+
+    PWA test is working.
+
+    <div class="installText">
+
+      Add this page to your home screen.
+
+      <br><br>
+
+      If the Kimata icon appears,
+      we’re ready to connect the real attendance system.
+
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+  if ("serviceWorker" in navigator) {
+
+    window.addEventListener(
+      "load",
+      function() {
+
+        navigator.serviceWorker.register(
+          "service-worker.js"
+        );
+
+      }
+    );
+
+  }
+
+</script>
+
+</body>
+</html>
