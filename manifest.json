@@ -7,9 +7,9 @@
   "theme_color": "#1471b7",
   "icons": [
     {
-      "src": "kimata-icon.jpg",
+      "src": "kimata-icon.png",
       "sizes": "512x512",
-      "type": "image/jpeg"
+      "type": "image/png"
     }
   ]
 }
